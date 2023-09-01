@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 1
+  profile: one
+  content_type: one
+  prompt: 
+  description: MyString
+  tags: MyString
+
+two:
+  id: 1
+  profile: two
+  content_type: two
+  prompt: 
+  description: MyString
+  tags: MyString

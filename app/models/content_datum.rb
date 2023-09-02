@@ -2,7 +2,7 @@ class ContentDatum < ApplicationRecord
   belongs_to :profile
   belongs_to :content_type
 
-  has_one :template
+  has_one :template, dependent: :destroy
 
   accepts_nested_attributes_for :template
 

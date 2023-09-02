@@ -1,5 +1,7 @@
 ActiveAdmin.register ContentDatum do
-  permit_params :profile_id, :content_type_id, :prompt, :description, :tags, template_attributes: [:id, :data, :file, :backgrounds, :_destroy]
+  permit_params :profile_id, :content_type_id, :prompt, :description, :tags#, template_attributes: [:id, :data, :file, { backgrounds: [] }, :_destroy]
+
+  json_editor
 
   show do
     attributes_table do
@@ -21,13 +23,13 @@ ActiveAdmin.register ContentDatum do
         f.input :content_type, as: :select, collection: [], input_html: { id: 'content_type_selector' }
       end
 
-      f.inputs "Template", for: [:template, f.object.template || Template.new] do |template_form|
-        template_form.input :file, as: :file
-        template_form.input :backgrounds, as: :file, input_html: { multiple: true }
-        template_form.input :data
-      end
+      # f.inputs "Template", for: [:template, f.object.template || Template.new] do |template_form|
+      #   template_form.input :data, as: :jsonb
+      #   template_form.input :file, as: :file
+      #   template_form.input :backgrounds, as: :file, input_html: { multiple: true }
+      # end
 
-      f.input :prompt, as: :string
+      f.input :prompt, as: :jsonb
       f.input :description, as: :string
       f.input :tags, as: :string
     end

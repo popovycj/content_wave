@@ -4,8 +4,7 @@ class Template < ApplicationRecord
   has_one_attached :file
   has_many_attached :backgrounds
 
-  validates :file, attached: true, content_type: ['text/html', 'application/x-erb', 'text/slim']
-  validates :backgrounds, content_type: ['video/mp4']
+  validates :file, attached: true
 
   def self.ransackable_attributes(auth_object = nil)
     ["created_at", "data", "id", "content_datum_id", "updated_at"]

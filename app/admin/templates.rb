@@ -1,6 +1,8 @@
 ActiveAdmin.register Template do
   permit_params :content_datum_id, :data, :file, backgrounds: []
 
+  json_editor
+
   filter :content_datum
 
   form do |f|
@@ -8,7 +10,7 @@ ActiveAdmin.register Template do
       f.input :content_datum
       f.input :file, as: :file
       f.input :backgrounds, as: :file, input_html: { multiple: true }
-      f.input :data
+      f.input :data, as: :jsonb
     end
     f.actions
   end
@@ -30,7 +32,7 @@ ActiveAdmin.register Template do
           end
         end
       end
-      row :data
+      row :data, as: :jsonb
     end
   end
 end

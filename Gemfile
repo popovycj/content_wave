@@ -79,4 +79,4 @@ gem "active_storage_validations", "~> 1.0"
 
 gem "telegram-bot-ruby", "~> 1.0"
 
-gem "cocaine", "~> 0.6.0"
+gem "mini_magick", "~> 4.12"

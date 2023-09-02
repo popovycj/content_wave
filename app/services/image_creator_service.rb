@@ -9,14 +9,14 @@ class ImageCreatorService
     @erb_template_data = erb_template_data
   end
 
-  def generate_image_binary
-    template_str = erb_template_blob.download
+  def call
+    template_str = erb_template_blob.download.force_encoding('UTF-8')
     template = ERB.new(template_str)
 
     rendered_html = template.result_with_hash(erb_template_data)
 
     image_binary_data, stderr_str, status = Open3.capture3(
-      'wkhtmltoimage - -',
+      'wkhtmltoimage --enable-local-file-access - -',
       stdin_data: rendered_html
     )
 

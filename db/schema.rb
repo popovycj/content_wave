@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_01_132942) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_02_122917) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -101,13 +101,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_132942) do
   end
 
   create_table "templates", force: :cascade do |t|
-    t.integer "project_id", null: false
-    t.integer "content_type_id", null: false
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["content_type_id"], name: "index_templates_on_content_type_id"
-    t.index ["project_id"], name: "index_templates_on_project_id"
+    t.integer "content_datum_id", default: 1, null: false
+    t.index ["content_datum_id"], name: "index_templates_on_content_datum_id", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -116,6 +114,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_01_132942) do
   add_foreign_key "content_data", "profiles"
   add_foreign_key "profiles", "projects"
   add_foreign_key "profiles", "social_networks"
-  add_foreign_key "templates", "content_types"
-  add_foreign_key "templates", "projects"
+  add_foreign_key "templates", "content_data"
 end

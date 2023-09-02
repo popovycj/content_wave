@@ -1,13 +1,11 @@
 ActiveAdmin.register Template do
-  permit_params :project_id, :content_type_id, :data, :file, backgrounds: []
+  permit_params :content_datum_id, :data, :file, backgrounds: []
 
-  filter :project
-  filter :content_type
+  filter :content_datum
 
   form do |f|
     f.inputs "Template Details" do
-      f.input :project
-      f.input :content_type
+      f.input :content_datum
       f.input :file, as: :file
       f.input :backgrounds, as: :file, input_html: { multiple: true }
       f.input :data
@@ -17,8 +15,7 @@ ActiveAdmin.register Template do
 
   show do
     attributes_table do
-      row :project
-      row :content_type
+      row :content_datum
       row :file do |template|
         if template.file.attached?
           link_to template.file.filename, url_for(template.file)

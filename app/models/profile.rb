@@ -18,4 +18,6 @@ class Profile < ApplicationRecord
   def to_s
     "#{project.title} - #{social_network.title}"
   end
+
+  alias_method :title, :to_s
 end

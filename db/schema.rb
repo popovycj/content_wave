@@ -11,13 +11,16 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_09_02_122917) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
     t.string "resource_type"
-    t.integer "resource_id"
+    t.bigint "resource_id"
     t.string "author_type"
-    t.integer "author_id"
+    t.bigint "author_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author"
@@ -54,9 +57,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_02_122917) do
   end
 
   create_table "content_data", force: :cascade do |t|
-    t.integer "profile_id", null: false
-    t.integer "content_type_id", null: false
-    t.json "prompt"
+    t.bigint "profile_id", null: false
+    t.bigint "content_type_id", null: false
+    t.jsonb "prompt"
     t.string "description"
     t.string "tags"
     t.datetime "created_at", null: false
@@ -72,16 +75,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_02_122917) do
   end
 
   create_table "content_types_social_networks", id: false, force: :cascade do |t|
-    t.integer "content_type_id", null: false
-    t.integer "social_network_id", null: false
+    t.bigint "content_type_id", null: false
+    t.bigint "social_network_id", null: false
     t.index ["content_type_id", "social_network_id"], name: "index_ct_sn"
     t.index ["social_network_id", "content_type_id"], name: "index_sn_ct"
   end
 
   create_table "profiles", force: :cascade do |t|
-    t.integer "project_id", null: false
-    t.integer "social_network_id", null: false
-    t.json "auth_data"
+    t.bigint "project_id", null: false
+    t.bigint "social_network_id", null: false
+    t.jsonb "auth_data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_profiles_on_project_id"
@@ -101,7 +104,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_02_122917) do
   end
 
   create_table "templates", force: :cascade do |t|
-    t.json "data"
+    t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "content_datum_id", default: 1, null: false

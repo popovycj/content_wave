@@ -80,3 +80,11 @@ gem "active_storage_validations", "~> 1.0"
 gem "telegram-bot-ruby", "~> 1.0"
 
 gem "mini_magick", "~> 4.12"
+
+gem "openai", "~> 0.3.0"
+
+gem "ruby-openai", "~> 5.1"
+
+gem "pg", "~> 1.5"
+
+gem 'activeadmin_json_editor', '~> 0.0.7'

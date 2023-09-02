@@ -5,7 +5,7 @@ class CreateTemplates < ActiveRecord::Migration[7.0]
       t.references :content_type, null: false, foreign_key: true
       t.binary :file
       t.binary :background
-      t.json :data
+      t.jsonb :data
 
       t.timestamps
     end

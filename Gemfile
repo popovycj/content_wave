@@ -88,3 +88,5 @@ gem "ruby-openai", "~> 5.1"
 gem "pg", "~> 1.5"
 
 gem 'activeadmin_json_editor', '~> 0.0.7'
+
+gem "sidekiq", "~> 7.1"

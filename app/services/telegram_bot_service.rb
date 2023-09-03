@@ -58,10 +58,14 @@ class TelegramBotService
   end
 
   def display_selected_ids(project_id, social_network_id, content_type_id)
+    ContentGeneratorWorker.perform_async(chat_id, project_id, social_network_id, content_type_id)
+
     text = "You have selected the following:\n"
     text += "Project ID: #{project_id}\n"
     text += "Social Network ID: #{social_network_id}\n"
     text += "Content Type ID: #{content_type_id}"
+    text += "\n\n"
+    text += "Please wait for the results to be displayed"
 
     bot.api.send_message(chat_id: chat_id, text: text)
   end

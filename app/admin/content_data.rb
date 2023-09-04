@@ -1,4 +1,6 @@
 ActiveAdmin.register ContentDatum do
+  config.filters = false
+
   permit_params :profile_id, :content_type_id, :prompt, :description, :tags#, template_attributes: [:id, :data, :file, { backgrounds: [] }, :_destroy]
 
   json_editor

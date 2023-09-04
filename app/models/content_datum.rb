@@ -3,6 +3,7 @@ class ContentDatum < ApplicationRecord
   belongs_to :content_type
 
   has_one :template, dependent: :destroy
+  has_many :pending_contents, dependent: :destroy
 
   accepts_nested_attributes_for :template
 

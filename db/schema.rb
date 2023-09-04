@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_02_122917) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_04_155529) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -81,6 +81,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_02_122917) do
     t.index ["social_network_id", "content_type_id"], name: "index_sn_ct"
   end
 
+  create_table "pending_contents", force: :cascade do |t|
+    t.integer "chat_id"
+    t.bigint "content_datum_id", null: false
+    t.binary "file"
+    t.string "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["content_datum_id"], name: "index_pending_contents_on_content_datum_id"
+  end
+
   create_table "profiles", force: :cascade do |t|
     t.bigint "project_id", null: false
     t.bigint "social_network_id", null: false
@@ -115,6 +125,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_02_122917) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "content_data", "content_types"
   add_foreign_key "content_data", "profiles"
+  add_foreign_key "pending_contents", "content_data"
   add_foreign_key "profiles", "projects"
   add_foreign_key "profiles", "social_networks"
   add_foreign_key "templates", "content_data"

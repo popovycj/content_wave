@@ -90,3 +90,9 @@ gem "pg", "~> 1.5"
 gem 'activeadmin_json_editor', '~> 0.0.7'
 
 gem "sidekiq", "~> 7.1"
+
+gem 'state_machines-activerecord'
+
+gem "pry", "~> 0.14.2"
+
+gem 'rs-active_admin-state_machine'

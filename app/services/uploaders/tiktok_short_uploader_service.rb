@@ -1,7 +1,7 @@
 require 'open3'
 
 class Uploaders::TiktokShortUploaderService
-  def initialize(session_id:, title:, tags:, video_binary:)
+  def initialize(session_id, title, tags, video_binary)
     @session_id = session_id
     @title = title
     @tags = tags

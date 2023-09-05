@@ -47,6 +47,7 @@ class TelegramBotService
     project_id = selections["Project"].to_i if selections["Project"]
     social_network_id = selections["SocialNetwork"].to_i if selections["SocialNetwork"]
     content_type_id = selections["ContentType"].to_i if selections["ContentType"]
+    pending_content_id = selections["PendingContent"].to_i if selections["PendingContent"]
 
     if selections["Project"] && selections["SocialNetwork"] && selections["ContentType"]
       display_selected_ids(project_id, social_network_id, content_type_id)
@@ -54,6 +55,8 @@ class TelegramBotService
       display_content_types(social_network_id, project_id)
     elsif selections["Project"]
       display_social_networks(project_id)
+    elsif selections["PendingContent"]
+      upload_content(pending_content_id)
     end
   end
 
@@ -68,6 +71,12 @@ class TelegramBotService
     text += "Please wait for the results to be displayed"
 
     bot.api.send_message(chat_id: chat_id, text: text)
+  end
+
+  def upload_content(content_id)
+    ContentUploaderWorker.perform_async(chat_id, content_id)
+
+    bot.api.send_message(chat_id: chat_id, text: "Please wait for the uploading...")
   end
 
   def display_options(items, empty_message, selection_message, &block)

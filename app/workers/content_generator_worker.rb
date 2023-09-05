@@ -12,6 +12,14 @@ class ContentGeneratorWorker
     description  = content_datum.description
     file_binary  = content_generator.call
 
+    content = PendingContent.new(content_datum_id: content_datum.id)
+    content.file.attach(
+      io: StringIO.new(file_binary),
+      filename: 'video.mp4',
+      content_type: 'video/mp4'
+    ) # TODO: make it work with other content types
+    content.save!
+
     tempfile = Tempfile.new(['video', '.mp4']) # TODO: make it work with other content types
     tempfile.binmode
     tempfile.write(file_binary)
@@ -25,7 +33,12 @@ class ContentGeneratorWorker
       bot.api.send_video(chat_id: chat_id, video: video_upload)
 
       message_text = "Description: #{description}\nTags: #{tags}"
-      bot.api.send_message(chat_id: chat_id, text: message_text)
+      callback_data = "PendingContent:#{content.id}"
+
+      button = Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Upload', callback_data: callback_data)
+      inline_keyboard = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: [[button]])
+
+      bot.api.send_message(chat_id: chat_id, text: message_text, reply_markup: inline_keyboard)
     end
 
     tempfile.close

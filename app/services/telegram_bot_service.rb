@@ -61,7 +61,7 @@ class TelegramBotService
   end
 
   def display_selected_ids(project_id, social_network_id, content_type_id)
-    ContentGeneratorWorker.perform_async(chat_id, project_id, social_network_id, content_type_id)
+    TelegramBot::ContentGeneratorWorker.perform_async(chat_id, project_id, social_network_id, content_type_id)
 
     text = "You have selected the following:\n"
     text += "Project ID: #{project_id}\n"
@@ -74,7 +74,7 @@ class TelegramBotService
   end
 
   def upload_content(content_id)
-    ContentUploaderWorker.perform_async(chat_id, content_id)
+    TelegramBot::ContentUploaderWorker.perform_async(chat_id, content_id)
 
     bot.api.send_message(chat_id: chat_id, text: "Please wait for the uploading...")
   end

@@ -24,6 +24,10 @@ class PendingContent < ApplicationRecord
     %w[chat_id content_datum_id created_at file id state updated_at]
   end
 
+  def file_path
+    ActiveStorage::Blob.service.path_for(file.key)
+  end
+
   private
 
   def generate_file_on_create
@@ -31,8 +35,7 @@ class PendingContent < ApplicationRecord
   end
 
   def generate_file_content
-    content_generator = Factories::ContentGeneratorServiceFactory.build(self)
-    file_binary = content_generator.call
+    file_binary = ContentGeneratorService.new(content_datum).call
 
     content_type   = content_datum.content_type
     mime_type      = content_type.mime_type
@@ -48,7 +51,6 @@ class PendingContent < ApplicationRecord
   def upload_content
     raise 'File is not attached' unless file.attached?
 
-    uploader = Factories::ContentUploaderServiceFactory.build(self)
-    uploader.call
+    ContentUploaderService.new(content_datum, content_datum.profile, file_path).call
   end
 end

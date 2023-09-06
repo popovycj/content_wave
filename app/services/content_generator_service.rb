@@ -1,10 +1,8 @@
 class ContentGeneratorService
   attr_reader :content_datum, :content_type, :template
 
-  def initialize(project_id, social_network_id, content_type_id)
-    @project_id        = project_id
-    @content_type_id   = content_type_id
-    @social_network_id = social_network_id
+  def initialize(content_datum)
+    @content_datum = content_datum
 
     prepare_variables
   end
@@ -19,19 +17,10 @@ class ContentGeneratorService
   private
 
   def prepare_variables
-    @content_datum ||= find_content_datum
-    return unless @content_datum
+    return if content_datum.nil?
 
-    @template     = @content_datum.template
-    @content_type = @content_datum.content_type
-  end
-
-  def find_content_datum
-    ContentDatum.includes(:profile, :content_type, :template)
-                .find_by(
-                   profile: { project_id: @project_id, social_network_id: @social_network_id },
-                   content_type_id: @content_type_id
-                )
+    @template     = content_datum.template
+    @content_type = content_datum.content_type
   end
 
   def generator_service

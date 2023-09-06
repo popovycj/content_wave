@@ -1,26 +1,28 @@
 require 'open3'
 
 class Uploaders::TiktokShortUploaderService
-  def initialize(session_id, title, tags, video_binary)
-    @session_id = session_id
-    @title = title
-    @tags = tags
-    @video_binary = video_binary
+  attr_reader :tags, :file_path, :auth_data, :description
+
+  def initialize(file_path, auth_data, tags, description)
+    @tags        = tags
+    @file_path   = file_path
+    @auth_data   = auth_data
+    @description = description
   end
 
   def call
-    Tempfile.create(['video', '.mp4']) do |tempfile|
-      tempfile.binmode
-      tempfile.write(@video_binary)
-      tempfile.rewind
+    _stdout, stderr, status = Open3.capture3(
+      "python3 lib/python/uploaders/tiktok_uploader.py -i #{session_id} -p #{file_path} -t #{description} --tags #{tags}"
+    )
 
-      _stdout, stderr, status = Open3.capture3(
-        "python3 lib/python/uploaders/tiktok_uploader.py -i #{@session_id} -p #{tempfile.path} -t #{@title} --tags #{@tags}"
-      )
-
-      raise "Upload failed: #{stderr}" unless status.success?
-    end
+    raise "Upload failed: #{stderr}" unless status.success?
 
     true
+  end
+
+  private
+
+  def session_id
+    auth_data['session_id']
   end
 end

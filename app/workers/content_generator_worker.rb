@@ -12,10 +12,10 @@ class ContentGeneratorWorker
   private
 
   def find_content_datum(project_id, social_network_id, content_type_id)
-    ContentDatum.includes(:profile, :content_type)
+    ContentDatum.includes(:profile)
                 .find_by(
-                   profile: { project_id: project_id, social_network_id: social_network_id },
-                   content_type_id: content_type_id
+                  profile: { project_id: project_id, social_network_id: social_network_id },
+                  content_type_id: content_type_id
                 )
   end
 end

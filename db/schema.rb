@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_04_155529) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_06_114616) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -72,6 +72,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_155529) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "file_content_type"
   end
 
   create_table "content_types_social_networks", id: false, force: :cascade do |t|
@@ -82,7 +83,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_155529) do
   end
 
   create_table "pending_contents", force: :cascade do |t|
-    t.integer "chat_id"
     t.bigint "content_datum_id", null: false
     t.binary "file"
     t.string "state"

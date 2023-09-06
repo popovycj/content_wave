@@ -6,20 +6,17 @@ ActiveAdmin.register PendingContent do
   index do
     selectable_column
     id_column
-    column :chat_id
     column :content_datum
     column :state
     column :file
     actions
   end
 
-  filter :chat_id
   filter :content_datum
   filter :state
 
   form do |f|
     f.inputs do
-      f.input :chat_id
       f.input :content_datum
       f.input :file, as: :file
     end
@@ -28,7 +25,6 @@ ActiveAdmin.register PendingContent do
 
   show do
     attributes_table do
-      row :chat_id
       row :content_datum
       row :state
       row :file do |template|

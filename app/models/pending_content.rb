@@ -1,6 +1,6 @@
 class PendingContent < ApplicationRecord
   belongs_to :content_datum
-  has_one_attached :file
+  has_one_attached :file, dependent: :destroy
 
   validates :state, presence: true
   validates :file, attached: true

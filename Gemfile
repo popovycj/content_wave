@@ -98,3 +98,7 @@ gem "pry", "~> 0.14.2"
 gem 'rs-active_admin-state_machine'
 
 gem "themoviedb", "~> 1.0"
+
+gem "rspotify", "~> 2.12"
+
+gem "genius", "~> 0.1.2"

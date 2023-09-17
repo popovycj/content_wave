@@ -23,14 +23,22 @@
 #    {:id=>37, :title=>"Вестерн", :total_pages=>416}]
 
 
-class RandomMovieService
+class RandomMovieService < ApplicationService
   attr_reader :genre_id
 
-  PAGES_RANGE    = (1..20).to_a.freeze
-  BASE_IMAGE_URL = 'https://image.tmdb.org/t/p/w500'.freeze
+  PAGES_RANGE       = (1..20).to_a.freeze
+  BASE_IMAGE_URL    = 'https://image.tmdb.org/t/p/w500'.freeze
+  DEFAULT_GENRE_IDS = [
+    35, # Comedy
+    80, # Crime
+    99, # Documentary
+    18, # Drama
+    9648, # Mystery
+    10_752, # War
+  ].freeze
 
-  def initialize(*genres_id)
-    @genre_id = genres_id.sample
+  def initialize(*genre_ids)
+    @genre_id = genre_ids.empty? ? DEFAULT_GENRE_IDS.sample : genre_ids.sample
   end
 
   def call

@@ -26,37 +26,42 @@
 class RandomMovieService < ApplicationService
   attr_reader :genre_id
 
+  RETRY_COUNT       = 15
   PAGES_RANGE       = (1..20).to_a.freeze
   BASE_IMAGE_URL    = 'https://image.tmdb.org/t/p/w500'.freeze
   DEFAULT_GENRE_IDS = [
-    35, # Comedy
-    80, # Crime
-    99, # Documentary
-    18, # Drama
-    9648, # Mystery
-    10_752, # War
+    35, 80, 99, 18, 9648, 10_752
   ].freeze
 
   def initialize(*genre_ids)
-    @genre_id = genre_ids.empty? ? DEFAULT_GENRE_IDS.sample : genre_ids.sample
+    @genre_id = genre_ids.sample || DEFAULT_GENRE_IDS.sample
   end
 
   def call
-    random_movie = detail(movies.sample['id'])
-    raise 'Invalid translation for movie' if random_movie['overview'].blank?
+    RETRY_COUNT.times do
+      random_movie = detail(movies.sample['id'])
+      return format_movie_data(random_movie) unless random_movie['overview'].blank?
 
-    {
-      title: random_movie['title'],
-      description: random_movie['overview'],
-      rating: random_movie['vote_average'],
-      poster_url: BASE_IMAGE_URL + random_movie['poster_path'],
-      release_date: random_movie['release_date'],
-      runtime: random_movie['runtime'],
-      genres: random_movie['genres'].nil? ? [genre.name] : random_movie['genres'].map { |genre| genre['name'] }
-    }
+      puts 'Invalid translation for movie. Retrying...'
+      sleep rand(1..5)
+    end
+
+    raise 'Invalid translation for movie'
   end
 
   private
+
+  def format_movie_data(movie)
+    {
+      title: movie['title'],
+      description: movie['overview'],
+      rating: movie['vote_average'],
+      poster_url: BASE_IMAGE_URL + movie['poster_path'],
+      release_date: movie['release_date'],
+      runtime: movie['runtime'],
+      genres: movie['genres']&.map { |genre| genre['name'] } || [genre.name]
+    }
+  end
 
   def genre
     @genre ||= Tmdb::Genre.detail(genre_id, page: PAGES_RANGE.sample)
@@ -69,12 +74,10 @@ class RandomMovieService < ApplicationService
   def detail(movie_id)
     movie = Tmdb::Movie.detail(movie_id)
 
-    if movie['belongs_to_collection'].present?
-      collection_id = movie['belongs_to_collection']['id']
-      collection = Tmdb::Collection.detail(collection_id)
-      movie = collection['parts'].first
-    end
+    return movie unless movie['belongs_to_collection']
 
-    movie
+    collection_id = movie['belongs_to_collection']['id']
+    collection = Tmdb::Collection.detail(collection_id)
+    collection['parts'].first
   end
 end

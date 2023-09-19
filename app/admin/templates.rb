@@ -1,5 +1,5 @@
 ActiveAdmin.register Template do
-  permit_params :content_datum_id, :data, :file, backgrounds: []
+  permit_params :title, :content_datum_id, :data, :file, backgrounds: []
 
   json_editor
 
@@ -7,6 +7,7 @@ ActiveAdmin.register Template do
 
   form do |f|
     f.inputs "Template Details" do
+      f.input :title
       f.input :content_datum
       f.input :file, as: :file
       f.input :backgrounds, as: :file, input_html: { multiple: true }
@@ -17,6 +18,7 @@ ActiveAdmin.register Template do
 
   show do
     attributes_table do
+      row :title
       row :content_datum
       row :file do |template|
         if template.file.attached?

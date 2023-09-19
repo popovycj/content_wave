@@ -8,6 +8,7 @@ ActiveAdmin.register ContentDatum do
   show do
     attributes_table do
       row :title
+      row :profile
       row :template
       row :content_type
       row :prompt

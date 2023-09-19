@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centered Design</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+
+        }
+
+        .background-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .background-image {
+            width: 1700px;
+            height: 1700;
+            filter: blur(8px);
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%) perspective(1200px) rotateX(10deg) rotateY(-10deg) scale(1.3); /* Added scale(1.4) */
+            transform-origin: left bottom; /* Sets the origin of the transformation to the left bottom corner */
+        }
+
+        .centered-block {
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 1000px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* align-items: center; */
+            /* background: rgba(0, 0, 0, 0.4); */
+            z-index: 1; /* This ensures the text is on top of the blurred image */
+        }
+
+        .glowing-text {
+            font-size: 45px;
+            color: #DDE0E4;
+            text-shadow:
+                  0 0 7px #DDE0E4,
+                  0 0 10px #DDE0E4,
+                  0 0 40px #DDE0E4;
+            margin-bottom: 10px; /* Adjust as needed */
+        }
+
+        .bolder-text {
+          font-size: 75px;
+          font-weight: 700;
+        }
+
+        .audio-timeline {
+            width: 100%;
+            height: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none; /* remove default styling */
+            background: rgba(228, 226, 221, 0.5); /* Unfilled part */
+            outline: none; /* To remove any focus border on certain browsers */
+            border-radius: 10px;
+        }
+
+        /* For the thumb (the circle) */
+        .audio-timeline::-webkit-slider-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #E4E2DD;
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+            box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2); /* Just to give a slight shadow */
+            position: relative;
+            top: -7.5px;
+        }
+
+        .audio-timeline::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #E4E2DD;
+            cursor: pointer;
+            box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* For the filled part */
+        .audio-timeline::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 5px;
+            cursor: pointer;
+            border-radius: 10px;
+            background: linear-gradient(to right, #E4E2DD 33%, rgba(228, 226, 221, 0.5) 33%);
+        }
+
+        .audio-timeline::-moz-range-track {
+            width: 100%;
+            height: 5px;
+            cursor: pointer;
+            border-radius: 10px;
+            background: linear-gradient(to right, #E4E2DD 33%, rgba(228, 226, 221, 0.5) 33%);
+        }
+
+        .audio-timeline__text-block {
+          font-family: 'Montserrat', sans-serif;
+          font-size: 25px;
+          margin-top: 20px;
+          display: flex;
+          justify-content: space-between;
+        }
+
+        .bottom-block {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center; /* center the text */
+            padding: 30px 0;    /* add some vertical padding to separate from the edge */
+            z-index: 2;         /* ensure it's on top of other elements in the container */
+        }
+
+
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="background-container">
+    <img src="<%= image %>" alt="Background" class="background-image">
+    <div class="centered-block">
+        <div class="glowing-text bolder-text">
+          <%= name %>
+        </div>
+        <div class="glowing-text" style="margin-bottom: 50px;">
+          <%= artists.join(', ') %>
+        </div>
+        <input type="range" class="audio-timeline" min="0" max="100" value="33">
+        <div class="audio-timeline__text-block glowing-text">
+          <div class="audio-timeline__text">0:39</div>
+          <div class="audio-timeline__text">-2:40</div>
+        </div>
+
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5" height="100px" color="#E4E2DD">
+          <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+        </svg>
+    </div>
+
+    <div class="bottom-block">
+      <div class="glowing-text">@mentality_conservation</div>
+    </div>
+</div>
+
+</body>
+</html>

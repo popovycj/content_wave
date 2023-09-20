@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_19_205638) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_20_210551) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -56,18 +56,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_19_205638) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "content_data", force: :cascade do |t|
-    t.bigint "profile_id", null: false
-    t.bigint "content_type_id", null: false
-    t.jsonb "prompt"
-    t.string "description"
-    t.string "tags"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["content_type_id"], name: "index_content_data_on_content_type_id"
-    t.index ["profile_id"], name: "index_content_data_on_profile_id"
-  end
-
   create_table "content_types", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", null: false
@@ -83,12 +71,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_19_205638) do
   end
 
   create_table "pending_contents", force: :cascade do |t|
-    t.bigint "content_datum_id", null: false
     t.binary "file"
     t.string "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["content_datum_id"], name: "index_pending_contents_on_content_datum_id"
+    t.bigint "template_id"
+    t.index ["template_id"], name: "index_pending_contents_on_template_id"
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -117,17 +105,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_19_205638) do
     t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "content_datum_id", default: 1, null: false
     t.string "title"
-    t.index ["content_datum_id"], name: "index_templates_on_content_datum_id", unique: true
+    t.bigint "profile_id"
+    t.bigint "content_type_id"
+    t.jsonb "prompt"
+    t.string "description"
+    t.string "tags"
+    t.index ["content_type_id"], name: "index_templates_on_content_type_id"
+    t.index ["profile_id"], name: "index_templates_on_profile_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "content_data", "content_types"
-  add_foreign_key "content_data", "profiles"
-  add_foreign_key "pending_contents", "content_data"
+  add_foreign_key "pending_contents", "templates"
   add_foreign_key "profiles", "projects"
   add_foreign_key "profiles", "social_networks"
-  add_foreign_key "templates", "content_data"
+  add_foreign_key "templates", "content_types"
+  add_foreign_key "templates", "profiles"
 end

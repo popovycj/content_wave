@@ -1,5 +1,5 @@
 class PendingContent < ApplicationRecord
-  belongs_to :content_datum
+  belongs_to :template
   has_one_attached :file, dependent: :destroy
 
   validates :state, presence: true
@@ -21,7 +21,7 @@ class PendingContent < ApplicationRecord
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    %w[chat_id content_datum_id created_at file id state updated_at]
+    %w[chat_id template_id created_at file id state updated_at]
   end
 
   def file_path
@@ -35,9 +35,9 @@ class PendingContent < ApplicationRecord
   end
 
   def generate_file_content
-    file_binary = ContentGeneratorService.new(content_datum).call
+    file_binary = ContentGeneratorService.new(template).call
 
-    content_type   = content_datum.content_type
+    content_type   = template.content_type
     mime_type      = content_type.mime_type
     file_extension = mime_type.split('/').last
     file.attach(
@@ -51,6 +51,6 @@ class PendingContent < ApplicationRecord
   def upload_content
     raise 'File is not attached' unless file.attached?
 
-    ContentUploaderService.new(content_datum, content_datum.profile, file_path).call
+    ContentUploaderService.new(template, template.profile, file_path).call
   end
 end

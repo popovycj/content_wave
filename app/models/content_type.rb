@@ -1,6 +1,5 @@
 class ContentType < ApplicationRecord
   has_many :templates
-  has_many :content_data
   has_and_belongs_to_many :social_networks
 
   validates :title, presence: true, length: { maximum: 255 }

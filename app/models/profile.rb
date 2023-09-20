@@ -2,7 +2,7 @@ class Profile < ApplicationRecord
   belongs_to :project
   belongs_to :social_network
 
-  has_many :content_data
+  has_many :templates
 
   validates :project_id, :social_network_id, presence: true, uniqueness: { scope: [:project_id, :social_network_id] }
   validates :auth_data, presence: true

@@ -1,0 +1,15 @@
+<% track = RandomTrackService.call %>
+
+<% image = track[:image].to_json %>
+<% name = track [:name].to_json %>
+<% artists = track[:artists].to_json %>
+<% external_urls = track[:external_urls].to_json %>
+
+{
+  "image": <%= image %>,
+  "name": <%= name %>,
+  "artists": <%= artists %>,
+  "external_urls": <%= external_urls %>,
+  "username": "@mentality_conservation",
+  "gpt_response": ""
+}

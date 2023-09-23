@@ -10,12 +10,8 @@ ActiveAdmin.register Template do
       f.input :title
       f.input :content_type
       f.input :profile
-      f.input :file, as: :file
-      f.input :backgrounds, as: :file, input_html: { multiple: true }
-      f.input :data, as: :jsonb
-      f.input :description
-      f.input :tags
-      f.input :prompt
+      # f.input :file, as: :file
+      # f.input :backgrounds, as: :file, input_html: { multiple: true }
     end
     f.actions
   end
@@ -25,24 +21,20 @@ ActiveAdmin.register Template do
       row :title
       row :content_type
       row :profile
-      row :file do |template|
-        if template.file.attached?
-          link_to template.file.filename, url_for(template.file)
-        end
-      end
-      row :backgrounds do |template|
-        ul do
-          template.backgrounds.each do |background|
-            li do
-              link_to background.filename, url_for(background)
-            end
-          end
-        end
-      end
-      row :data, as: :jsonb
-      row :description
-      row :tags
-      row :prompt
+      # row :file do |template|
+      #   if template.file.attached?
+      #     link_to template.file.filename, url_for(template.file)
+      #   end
+      # end
+      # row :backgrounds do |template|
+      #   ul do
+      #     template.backgrounds.each do |background|
+      #       li do
+      #         link_to background.filename, url_for(background)
+      #       end
+      #     end
+      #   end
+      # end
     end
   end
 end

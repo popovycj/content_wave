@@ -2,6 +2,7 @@ ActiveAdmin.register PendingContent do
   permit_params :chat_id, :template_id, :state, :file
 
   state_action :upload
+  state_action :generate
 
   index do
     selectable_column
@@ -9,6 +10,7 @@ ActiveAdmin.register PendingContent do
     column :template
     column :state
     column :file
+    column :description
     actions
   end
 
@@ -32,6 +34,7 @@ ActiveAdmin.register PendingContent do
           link_to template.file.filename, url_for(template.file)
         end
       end
+      row :description
     end
   end
 end

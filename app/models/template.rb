@@ -4,34 +4,56 @@ class Template < ApplicationRecord
 
   has_many :pending_contents, dependent: :destroy
 
-  has_one_attached :file
-  has_many_attached :backgrounds
-
-  validates :file, attached: true
   validates :profile_id, :content_type_id, presence: true, uniqueness: { scope: [:profile_id, :content_type_id] }
 
-  before_validation :attach_file_from_views, unless: :file_attachment
-
   def self.ransackable_attributes(auth_object = nil)
-    ["created_at", "data", "id", "profile_id", "title", "content_type_id", "updated_at"]
+    "created_at data id profile_id title content_type_id updated_at"
   end
 
   def self.ransackable_associations(auth_object = nil)
-    ["backgrounds_attachments", "backgrounds_blobs", "profile", "content_type", "file_attachment", "file_blob",]
+    "profile content_type"
+  end
+
+  def data_template_path
+    template_path("data.json.erb")
+  end
+
+  def image_template_path
+    template_path("image.html.erb")
+  end
+
+  def description_template_path
+    template_path("description.html.erb")
+  end
+
+  def prompt_template_path
+    template_path("prompt.text.erb")
+  end
+
+  def backgrounds
+    []
   end
 
   private
 
-  def attach_file_from_views
-    content_type  = content_type.title.underscore.parameterize(separator: '_')
-    project_title = profile.project.title.underscore.parameterize(separator: '_')
+  def content_type_title
+    @content_type_title ||= content_type.title.underscore.parameterize(separator: '_')
+  end
 
-    file_path = Rails.root.join(
-      "app", "views", "templates", "#{project_title}", "#{content_type.pluralize}", "#{title}", "index.html.erb"
+  def project_title
+    @project_title ||= profile.project.title.underscore.parameterize(separator: '_')
+  end
+
+  def generate_template_path(file_name)
+    Rails.root.join(
+      "app", "views", "templates", project_title, content_type_title.pluralize, title, file_name
     )
+  end
 
-    return false unless File.exist?(file_path)
+  def template_path(file_name)
+    file_path = generate_template_path(file_name)
+    return unless File.exist?(file_path)
 
-    file.attach(io: File.open(file_path), filename: "index.html.erb", content_type: "text/html")
+    file_path
   end
 end

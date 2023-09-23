@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_20_210551) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_23_125131) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -76,6 +76,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_20_210551) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "template_id"
+    t.string "description"
     t.index ["template_id"], name: "index_pending_contents_on_template_id"
   end
 
@@ -102,15 +103,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_20_210551) do
   end
 
   create_table "templates", force: :cascade do |t|
-    t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "title"
     t.bigint "profile_id"
     t.bigint "content_type_id"
-    t.jsonb "prompt"
-    t.string "description"
-    t.string "tags"
     t.index ["content_type_id"], name: "index_templates_on_content_type_id"
     t.index ["profile_id"], name: "index_templates_on_profile_id"
   end

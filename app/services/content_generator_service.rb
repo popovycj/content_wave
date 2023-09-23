@@ -1,58 +1,66 @@
 class ContentGeneratorService
-  attr_reader :content_datum, :content_type, :template
+  attr_reader :template
 
-  def initialize(content_datum)
-    @content_datum = content_datum
-
-    prepare_variables
+  def initialize(template)
+    @template = template
+    validate_template
   end
 
   def call
-    return unless content_datum
-
-    background = template.backgrounds.sample
-    generator_service.new(image_binary, background).call
+    [content, description]
   end
 
   private
 
-  def prepare_variables
-    return if content_datum.nil?
+  def validate_template
+    raise 'No template provided' unless template
+    raise 'No data template path' if template.data_template_path.nil?
+  end
 
-    @template     = content_datum.template
-    @content_type = content_datum.content_type
+  def content
+    generator_service.new(image_binary, random_background).call
+  end
+
+  def description
+    return nil if template.description_template_path.nil?
+
+    process_template(template.description_template_path, template_data: template_data)
+  end
+
+  def random_background
+    template.backgrounds.sample
   end
 
   def generator_service
-    "#{content_type.title.classify}GeneratorService".constantize
+    @generator_service ||= "#{template.content_type.title.classify}GeneratorService".constantize
   end
 
   def image_binary
-    ImageCreatorService.new(template.file, template_data).call
+    ImageCreatorService.new(template.image_template_path, template_data).call
   end
 
   def template_data
-    evaluated_template_data = process_eval_key(template.data)
-    gpt_api_response = GptApiService.new(content_datum.prompt).call
-
-    evaluated_template_data.merge(JSON.parse(gpt_api_response))
+    @template_data ||= begin
+      data = process_template(template.data_template_path, is_json: true)
+      prompt = process_prompt(data)
+      data.merge!(gpt_response(prompt)) unless prompt.nil?
+      data
+    end
   end
 
-  def process_eval_key(input_hash)
-    return input_hash unless input_hash.key?('eval')
+  def process_prompt(data)
+    return nil if template.prompt_template_path.nil?
 
-    new_hash = input_hash.dup
-    eval_hash = new_hash.delete('eval')
+    process_template(template.prompt_template_path, template_data: data)
+  end
 
-    evaluated_hash = eval_hash.transform_values do |value|
-      begin
-        eval(value)
-      rescue SyntaxError, StandardError => e
-        puts "Error evaluating #{value}: #{e}"
-        value
-      end
-    end
+  def process_template(template_path, template_data: {}, is_json: false)
+    erb_content = File.read(template_path)
+    result = ERB.new(erb_content).result_with_hash(template_data)
+    is_json ? JSON.parse(result) : result
+  end
 
-    new_hash.merge!(evaluated_hash)
+  def gpt_response(prompt)
+    GptApiService.new(prompt).call
   end
 end

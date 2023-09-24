@@ -100,9 +100,9 @@
 
 <div class="background-container">
     <img src="<%= poster_url %>" alt="Background" class="background-image">
-    <img src="https://i.imgur.com/47jGcCG.png" alt="Vignette" class="vignette-image">
+    <img src="<%= ImgurService.instance.imgur_links["mentality_conservation/movie_recommendation/vingette.png"] %>" alt="Vignette" class="vignette-image">
     <div class="centered-block">
-        <img src="https://i.imgur.com/Kt9AIGQ.png" alt="Logo" class="movie-night-logo">
+        <img src="<%= ImgurService.instance.imgur_links["mentality_conservation/movie_recommendation/movie_night.png"] %>" alt="Logo" class="movie-night-logo">
         <div class="movie-title">
             <%= title %> (<%= release_year %>)
         </div>

@@ -4,14 +4,17 @@ require 'tempfile'
 module TelegramBot
   class ContentGeneratorWorker < ContentGeneratorWorker
     def perform(chat_id, project_id, social_network_id, content_type_id)
-      description, tags, content_id = super(project_id, social_network_id, content_type_id)
+      # description, tags, content_id = super(project_id, social_network_id, content_type_id)
+      description, content_id = super(project_id, social_network_id, content_type_id)
 
-      send_to_telegram(chat_id, description, tags, content_id)
+      # send_to_telegram(chat_id, description, tags, content_id)
+      send_to_telegram(chat_id, description, content_id)
     end
 
     private
 
-    def send_to_telegram(chat_id, description, tags, content_id)
+    # def send_to_telegram(chat_id, description, tags, content_id)
+    def send_to_telegram(chat_id, description, content_id)
       content = PendingContent.find(content_id)
       file_binary = content.file.download
 
@@ -27,13 +30,14 @@ module TelegramBot
 
         bot.api.send_video(chat_id: chat_id, video: video_upload)
 
-        message_text = "Description: #{description}\nTags: #{tags}"
+        # message_text = "Description: #{description}\nTags: #{tags}"
+        message_text = "Description: #{description}"
         callback_data = "PendingContent:#{content_id}"
 
         button = Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Upload', callback_data: callback_data)
         inline_keyboard = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: [[button]])
 
-        bot.api.send_message(chat_id: chat_id, text: message_text, reply_markup: inline_keyboard)
+        bot.api.send_message(chat_id: chat_id, text: message_text, reply_markup: inline_keyboard, parse_mode: 'HTML')
       end
 
       tempfile.close

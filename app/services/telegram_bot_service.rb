@@ -109,7 +109,7 @@ class TelegramBotService
 
   def display_content_types(social_network_id, project_id)
     profile = Profile.find_by(social_network_id: social_network_id, project_id: project_id)
-    content_types = profile.content_data.map(&:content_type).uniq
+    content_types = profile.templates.map(&:content_type).uniq
 
     display_options(content_types, "No content types found for the selected social network.", "Please select a content type:") do |ct|
       { text: ct.title, callback_data: "Project:#{project_id}|SocialNetwork:#{social_network_id}|ContentType:#{ct.id}" }

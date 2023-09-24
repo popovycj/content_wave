@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centered Design</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+
+        }
+
+        .background-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .background-image {
+            width: 1700px;
+            height: 1700;
+            filter: blur(8px);
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%) perspective(1200px) rotateX(10deg) rotateY(-10deg) scale(1.3); /* Added scale(1.4) */
+            transform-origin: left bottom; /* Sets the origin of the transformation to the left bottom corner */
+        }
+
+        .centered-block {
+            position: relative;
+            top: 63%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 1000px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* align-items: center; */
+            /* background: rgba(0, 0, 0, 0.4); */
+            z-index: 2; /* This ensures the text is on top of the blurred image */
+        }
+
+        .movie-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 45px;
+            color: white;
+            margin-bottom: 10px; /* Adjust as needed */
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 70px;
+        }
+
+        .username {
+            font-family: 'Poppins', sans-serif;
+            font-size: 30px;
+            color: white;
+            margin-bottom: 10px; /* Adjust as needed */
+            text-align: center;
+        }
+
+        /* .bottom-block {
+            position: absolute;
+            bottom: 10%;
+            width: 100%;
+            text-align: center;
+            padding: 30px 0;
+            z-index: 2;
+        } */
+
+
+        .vignette-image {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;   /* Full width */
+            height: 100%;  /* Full height */
+            z-index: 1;    /* Ensures the vignette is above the background but below the text */
+        }
+
+        .movie-night-logo {
+            align-self: center;
+            width: 700px;
+        }
+
+
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@300&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="background-container">
+    <img src="<%= poster_url %>" alt="Background" class="background-image">
+    <img src="https://i.imgur.com/47jGcCG.png" alt="Vignette" class="vignette-image">
+    <div class="centered-block">
+        <img src="https://i.imgur.com/Kt9AIGQ.png" alt="Logo" class="movie-night-logo">
+        <div class="movie-title">
+            <%= title %> (<%= release_year %>)
+        </div>
+      <div class="username"><%= username %></div>
+
+    </div>
+</div>
+
+</body>
+</html>

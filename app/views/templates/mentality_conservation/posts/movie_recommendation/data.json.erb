@@ -1,0 +1,23 @@
+<% movie = RandomMovieService.call %>
+
+<% title = movie[:title] %>
+<% description = movie[:description] %>
+<% rating = movie[:rating] %>
+<% poster_url = movie[:poster_url] %>
+<% release_date = movie[:release_date] %>
+<% release_year = release_date.split('-').first %>
+<% runtime = movie[:runtime] %>
+<% genres = movie[:genres] %>
+
+{
+  "title": <%= title.to_json %>,
+  "description": <%= description.to_json %>,
+  "rating": <%= rating.to_json %>,
+  "poster_url": <%= poster_url.to_json %>,
+  "release_date": <%= release_date.to_json %>,
+  "release_year": <%= release_year.to_json %>,
+  "runtime": <%= runtime.to_json %>,
+  "genres": <%= genres.to_json %>,
+  "username": "@mentality_conservation",
+  "gpt_response": ""
+}

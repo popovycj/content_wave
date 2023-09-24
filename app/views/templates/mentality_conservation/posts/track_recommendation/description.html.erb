@@ -1,7 +1,8 @@
-<% external_urls.each do |key, value| %>
-  <strong>
-    <a href="<%= value %>" target="_blank">
-      <%= key %>
-    </a>
-  </strong>
-<% end %>
+✨ хвилинка музикальної терапії:
+
+<strong><%= name %></strong> by <%= artists.join(', ') %>
+
+<a href="<%= external_urls['spotify'].html_safe %>">🧷 посилання на спотік</a>
+
+
+<a href="https://t.me/mentality_conservation">закон збереження твоєї менталочки</a>

@@ -3,8 +3,11 @@ class Template < ApplicationRecord
   belongs_to :content_type
 
   has_many :pending_contents, dependent: :destroy
+  has_many :schedule_times, dependent: :destroy
 
-  validates :profile_id, :content_type_id, presence: true, uniqueness: { scope: [:profile_id, :content_type_id] }
+  validates :profile_id, :content_type_id, presence: true
+
+  scope :by_day, ->(day_id) { joins(:schedule_times).where(schedule_times: { day_id: day_id }) }
 
   def self.ransackable_attributes(auth_object = nil)
     "created_at data id profile_id title content_type_id updated_at"

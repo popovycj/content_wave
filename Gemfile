@@ -102,3 +102,5 @@ gem "themoviedb", "~> 1.0"
 gem "rspotify", "~> 2.12"
 
 gem "genius", "~> 0.1.2"
+
+gem 'galetahub-enum_field', require: 'enum_field'

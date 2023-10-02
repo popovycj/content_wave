@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_23_125131) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_02_195510) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -96,6 +96,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_23_125131) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "schedule_times", force: :cascade do |t|
+    t.bigint "template_id", null: false
+    t.bigint "day_id", null: false
+    t.bigint "time_range_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["template_id"], name: "index_schedule_times_on_template_id"
+  end
+
   create_table "social_networks", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", null: false
@@ -117,6 +126,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_23_125131) do
   add_foreign_key "pending_contents", "templates"
   add_foreign_key "profiles", "projects"
   add_foreign_key "profiles", "social_networks"
+  add_foreign_key "schedule_times", "templates"
   add_foreign_key "templates", "content_types"
   add_foreign_key "templates", "profiles"
 end

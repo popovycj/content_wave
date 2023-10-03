@@ -3,6 +3,7 @@ ActiveAdmin.register PendingContent do
 
   state_action :upload
   state_action :generate
+  state_action :regenerate
   state_action :schedule
 
   index do

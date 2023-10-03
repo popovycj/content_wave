@@ -11,6 +11,10 @@ class PendingContent < ApplicationRecord
       transition created: :generated
     end
 
+    event :regenerate do
+      transition generated: :created
+    end
+
     event :schedule do
       transition any => :scheduled
     end
@@ -22,6 +26,7 @@ class PendingContent < ApplicationRecord
     before_transition created: :generated, do: :generate_content
     before_transition to: :scheduled, do: :schedule_content
     before_transition to: :uploaded, do: :upload_content
+    after_transition on: :regenerate, do: :regenerate_content
   end
 
   def self.ransackable_attributes(auth_object = nil)
@@ -76,5 +81,10 @@ class PendingContent < ApplicationRecord
     target_time = now.change(hour: hour, min: min)
 
     target_time > now ? target_time : now + 30.minutes
+  end
+
+  def regenerate_content
+    file.purge
+    generate!
   end
 end

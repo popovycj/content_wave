@@ -33,12 +33,20 @@ ActiveAdmin.register PendingContent do
     attributes_table do
       row :template
       row :state
-      row :file do |template|
-        if template.file.attached?
-          link_to template.file.filename, url_for(template.file)
+      row :file do |content|
+        if content.file.attached?
+          if content.file.image?
+            link_to image_tag(url_for(content.file), width: 300), url_for(content.file)
+          elsif content.file.video?
+            video_tag(url_for(content.file), controls: true, width: 300)
+          else
+            link_to "File: #{content.file.filename}", url_for(content.file)
+          end
         end
       end
-      row :description
+      row :description do |content|
+        content.description.html_safe if content.description.present?
+      end
       row :time_to_upload
     end
   end

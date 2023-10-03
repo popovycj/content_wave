@@ -4,16 +4,23 @@ class PendingContent < ApplicationRecord
 
   validates :state, presence: true
 
-  state_machine :state, initial: :created do
-    event :upload do
-      transition any => :uploaded
-    end
+  after_create :schedule_deletion
 
+  state_machine :state, initial: :created do
     event :generate do
       transition created: :generated
     end
 
+    event :schedule do
+      transition any => :scheduled
+    end
+
+    event :upload do
+      transition any => :uploaded
+    end
+
     before_transition created: :generated, do: :generate_content
+    before_transition to: :scheduled, do: :schedule_content
     before_transition to: :uploaded, do: :upload_content
   end
 
@@ -26,6 +33,11 @@ class PendingContent < ApplicationRecord
   end
 
   private
+
+  def schedule_deletion
+    deletion_time = created_at + 1.day
+    ContentDestroyerWorker.perform_at(deletion_time, id)
+  end
 
   def generate_content
     file_binary, description = ContentGeneratorService.new(template).call
@@ -47,9 +59,22 @@ class PendingContent < ApplicationRecord
     save!
   end
 
+  def schedule_content
+    upload_time = next_occurrence_of_time(time_to_upload)
+    ContentUploaderWorker.perform_at(upload_time, id)
+  end
+
   def upload_content
     raise 'File is not attached' unless file.attached?
 
     ContentUploaderService.new(self).call
+  end
+
+  def next_occurrence_of_time(time_str)
+    now = Time.now
+    hour, min = time_str.split(":").map(&:to_i)
+    target_time = now.change(hour: hour, min: min)
+
+    target_time > now ? target_time : now + 30.minutes
   end
 end

@@ -104,3 +104,5 @@ gem "rspotify", "~> 2.12"
 gem "genius", "~> 0.1.2"
 
 gem 'galetahub-enum_field', require: 'enum_field'
+
+gem "sidekiq-cron", "~> 1.10"

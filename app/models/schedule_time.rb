@@ -8,4 +8,6 @@ class ScheduleTime < ApplicationRecord
 
   enumerated_attribute :day
   enumerated_attribute :time_range
+
+  scope :today, -> { where(day_id: Time.now.wday) }
 end

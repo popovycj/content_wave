@@ -1,8 +1,9 @@
 ActiveAdmin.register PendingContent do
-  permit_params :chat_id, :template_id, :state, :file
+  permit_params :chat_id, :template_id, :state, :file, :time_to_upload
 
   state_action :upload
   state_action :generate
+  state_action :schedule
 
   index do
     selectable_column
@@ -11,6 +12,7 @@ ActiveAdmin.register PendingContent do
     column :state
     column :file
     column :description
+    column :time_to_upload
     actions
   end
 
@@ -21,6 +23,7 @@ ActiveAdmin.register PendingContent do
     f.inputs do
       f.input :template
       f.input :file, as: :file
+      f.input :time_to_upload
     end
     f.actions
   end
@@ -35,6 +38,7 @@ ActiveAdmin.register PendingContent do
         end
       end
       row :description
+      row :time_to_upload
     end
   end
 end

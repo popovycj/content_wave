@@ -7,7 +7,11 @@ class Template < ApplicationRecord
 
   validates :profile_id, :content_type_id, presence: true
 
-  scope :by_day, ->(day_id) { joins(:schedule_times).where(schedule_times: { day_id: day_id }) }
+  scope :with_today_schedule_times, -> {
+    joins(:schedule_times)
+    .merge(ScheduleTime.today)
+    .includes(:schedule_times)
+  }
 
   def self.ransackable_attributes(auth_object = nil)
     "created_at data id profile_id title content_type_id updated_at"

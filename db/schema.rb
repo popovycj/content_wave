@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_02_195510) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_03_141804) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -77,6 +77,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_195510) do
     t.datetime "updated_at", null: false
     t.bigint "template_id"
     t.string "description"
+    t.string "time_to_upload"
     t.index ["template_id"], name: "index_pending_contents_on_template_id"
   end
 

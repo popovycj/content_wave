@@ -6,7 +6,7 @@ Rails.application.configure do
   # Code is not reloaded between requests.
   config.cache_classes = true
 
-  host = ENV["DEFAULT_URL_HOST"] || "#{ENV["HEROKU_APP_NAME"]}.herokuapp.com"
+  host = ENV["DEFAULT_URL"] || "#{ENV["HEROKU_APP_NAME"]}.herokuapp.com"
   protocol = config.force_ssl ? "https" : "http"
 
   config.action_controller.default_url_options = {
@@ -100,4 +100,6 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.hosts << ".herokuapp.com"
 end

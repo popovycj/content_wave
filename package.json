@@ -1,8 +1,5 @@
 {
   "dependencies": {
     "puppeteer": "^21.3.8"
-  },
-  "scripts": {
-    "heroku-postbuild": "bash postbuild.bash"
   }
 }

@@ -4,7 +4,13 @@ require 'grover'
 class ImageCreatorService
   attr_reader :erb_template_path, :erb_template_data, :options
 
-  def initialize(erb_template_path, erb_template_data={}, options={ format: 'png', viewport: { width: 1563, height: 1563 } })
+  DEFAULT_OPTIONS = {
+    format: 'png',
+    viewport: { width: 1563, height: 1563 },
+    launcher_args: ['--no-sandbox', '--disable-setuid-sandbox']
+  }.freeze
+
+  def initialize(erb_template_path, erb_template_data={}, options=DEFAULT_OPTIONS)
     @erb_template_path = erb_template_path
     @erb_template_data = erb_template_data
     @options = options

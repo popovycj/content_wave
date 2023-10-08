@@ -7,7 +7,6 @@ class ImageCreatorService
   DEFAULT_OPTIONS = {
     format: 'png',
     viewport: { width: 1563, height: 1563 },
-    launcher_args: ['--no-sandbox', '--disable-setuid-sandbox']
   }.freeze
 
   def initialize(erb_template_path, erb_template_data={}, options=DEFAULT_OPTIONS)

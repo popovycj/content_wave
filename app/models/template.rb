@@ -5,6 +5,8 @@ class Template < ApplicationRecord
   has_many :pending_contents, dependent: :destroy
   has_many :schedule_times, dependent: :destroy
 
+  accepts_nested_attributes_for :schedule_times, allow_destroy: true
+
   validates :profile_id, :content_type_id, presence: true
 
   scope :with_today_schedule_times, -> {

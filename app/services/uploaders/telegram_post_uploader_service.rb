@@ -15,7 +15,7 @@ class Uploaders::TelegramPostUploaderService
     Telegram::Bot::Client.run(Rails.application.credentials.telegram[:token]) do |bot|
       bot.api.send_photo(
         chat_id: channel_id,
-        photo: Faraday::UploadIO.new(file_path, 'image/jpeg'),
+        photo: file_path,
         caption: description,
         parse_mode: 'HTML'
       )

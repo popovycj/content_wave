@@ -34,7 +34,7 @@ class PendingContent < ApplicationRecord
   end
 
   def file_path
-    ActiveStorage::Blob.service.path_for(file.key)
+    file.blob.url
   end
 
   private

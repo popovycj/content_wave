@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="grover-format" content="png">
+    <meta name="grover-viewport-width" content=1563>
+    <meta name="grover-viewport-height" content=1563>
+
+    <title>Image with Overlapping Text</title>
+    <style>
+      body {
+          margin: 0;
+          padding: 0;
+        }
+
+      .image-container {
+          position: relative;
+          width: 1563px;
+          height: 1563px;
+      }
+
+      .image-container img {
+          width: 100%;
+          height: 100%;
+          display: block;
+      }
+
+      .overlay-username {
+          position: absolute;
+          top: 5%;
+          left: 50%; /* Set this to 50% to start the centering horizontally */
+          transform: translateX(-50%); /* This shifts it leftward by half its width to ensure it's truly centered */
+          font-family: 'Inter', sans-serif;
+          font-size: 20px;
+          color: white;
+          text-align: center; /* This ensures the text inside is centered */
+          opacity: 0.8;
+      }
+
+
+      .overlay-text {
+          position: absolute;
+          top: 17%;
+          left: 50%;
+          width: 80%;
+          max-width: 80%;
+          transform: translateX(-50%);
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          gap: 40px;
+      }
+
+
+      .overlay-text .title {
+        font-family: 'Playfair Display', serif;
+          font-size: 100px;
+          color: #C9E265;
+      }
+
+      .overlay-text .content {
+        color: white;
+        font-family: 'Inter', sans-serif;
+        font-size: 30px;
+        opacity: 0.8;
+        text-align: justify;
+        hyphens: auto;
+        padding: 0 250px;
+      }
+
+    </style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter&family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="image-container">
+        <img src="<%= ImgurService.instance.imgur_links["mentality_conservation/daily_reminder/background.png"] %>" alt="Your Image Description">
+        <div class="overlay-username">
+          <%= username %>
+        </div>
+        <div class="overlay-text">
+          <div class="title"><%= title %></div>
+          <div class="content">
+            <%= affirmation %>
+          </div>
+        </div>
+    </div>
+</body>
+</html>

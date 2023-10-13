@@ -42,16 +42,16 @@ class ContentGeneratorService
   def template_data
     @template_data ||= begin
       data = process_template(template.data_template_path, is_json: true)
-      prompt = process_prompt(data)
-      data.merge!(gpt_response(prompt)) unless prompt.nil?
+      openai_config = process_openai_config(data)
+      data.merge!(gpt_response(openai_config)) unless openai_config.nil?
       data
     end
   end
 
-  def process_prompt(data)
-    return nil if template.prompt_template_path.nil?
+  def process_openai_config(data)
+    return nil if template.openai_config_template_path.nil?
 
-    process_template(template.prompt_template_path, template_data: data)
+    process_template(template.openai_config_template_path, template_data: data, is_json: true)
   end
 
   def process_template(template_path, template_data: {}, is_json: false)
@@ -60,7 +60,7 @@ class ContentGeneratorService
     is_json ? JSON.parse(result) : result
   end
 
-  def gpt_response(prompt)
-    GptApiService.new(prompt).call
+  def gpt_response(openai_config)
+    GptApiService.new(openai_config).call
   end
 end

@@ -1,8 +1,8 @@
 class GptApiService
-  attr_reader :prompt
+  attr_reader :config
 
-  def initialize(prompt)
-    @prompt = prompt
+  def initialize(config)
+    @config = config
     @client = OpenAI::Client.new
   end
 
@@ -13,17 +13,10 @@ class GptApiService
   private
 
   def gpt3_response
-    messages = [
-      { role: 'system', content: @prompt['role'] },
-      { role: 'user', content: @prompt['content'] }
-    ]
-
     response = @client.chat(
-      parameters: {
-          model: "gpt-3.5-turbo",
-          messages: messages
-      })
+      parameters: config
+    )
 
-    response.dig("choices", 0, "message", "content")
+    JSON.parse(response['choices'].first.dig('message', 'function_call', 'arguments'))
   end
 end

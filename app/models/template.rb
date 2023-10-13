@@ -35,8 +35,8 @@ class Template < ApplicationRecord
     template_path("description.html.erb")
   end
 
-  def prompt_template_path
-    template_path("prompt.text.erb")
+  def openai_config_template_path
+    template_path("openai_config.json.erb")
   end
 
   def backgrounds

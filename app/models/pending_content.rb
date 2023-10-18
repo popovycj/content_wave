@@ -45,22 +45,27 @@ class PendingContent < ApplicationRecord
   end
 
   def generate_content
-    file_binary, description = ContentGeneratorService.new(template).call
+    file_, description = GenerationFlow::ContentGenerator.call(template)
 
     update(description: description)
-    attach_file(file_binary)
+    attach_file(file_)
   end
 
-  def attach_file(file_binary)
-    content_type   = template.content_type
-    mime_type      = content_type.mime_type
-    file_extension = mime_type.split('/').last
+  def attach_file(file_)
+    mime = MimeMagic.by_magic(file_)
+
+    mime_type = mime.type
+    extension = mime.extensions.first
+    filename  = "content.#{extension}"
 
     file.attach(
-      io: StringIO.new(file_binary),
-      filename: "content.#{file_extension}",
+      io: File.open(file_.path),
+      filename: filename,
       content_type: mime_type
     )
+
+    file_.close
+    file_.unlink
     save!
   end
 

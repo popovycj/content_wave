@@ -1,15 +1,30 @@
 <% track = RandomTrackService.call %>
 
-<% image = track[:image].to_json %>
-<% name = track [:name].to_json %>
-<% artists = track[:artists].to_json %>
+<% image         = track[:image].to_json %>
+<% name          = track[:name].to_json %>
+<% artists       = track[:artists].to_json %>
+<% duration_ms   = track[:duration_ms].to_json %>
+<% preview_url   = track[:preview_url].to_json %>
 <% external_urls = track[:external_urls].to_json %>
 
 {
-  "image": <%= image %>,
-  "name": <%= name %>,
-  "artists": <%= artists %>,
-  "external_urls": <%= external_urls %>,
-  "username": "@mentality_conservation",
-  "gpt_response": ""
+  "render_data": {
+    "image": <%= image %>,
+    "name": <%= name %>,
+    "artists": <%= artists %>,
+    "external_urls": <%= external_urls %>,
+    "username": "@mentality_conservation",
+    "duration_ms": <%= duration_ms %>,
+    "preview_url": <%= preview_url %>
+  },
+  "puppeteer_options": {
+    "defaultViewport": {
+      "width": 1563,
+      "height": 1563
+    },
+    "duration": 30
+  },
+  "video_options": {
+    "audio": <%= preview_url %>
+  }
 }

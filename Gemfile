@@ -77,8 +77,6 @@ gem "sassc", "~> 2.4"
 
 gem "active_storage_validations", "~> 1.0"
 
-gem "telegram-bot-ruby", "~> 1.0"
-
 gem "mini_magick", "~> 4.12"
 
 gem "openai", "~> 0.3.0"
@@ -110,3 +108,5 @@ gem "sidekiq-cron", "~> 1.10"
 gem 'aws-sdk-s3'
 
 gem "grover", "~> 1.1"
+
+gem "mimemagic", "~> 0.4.3"

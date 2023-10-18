@@ -4,9 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <% script = "
+        const timeline = document.getElementById('timeline');
+        const startText = document.getElementById('timeline-start');
+        const endText = document.getElementById('timeline-end');
+
+        const duration_ms = #{duration_ms};
+
+        const elapsed_ms = (1/3) * duration_ms;
+        const remaining_ms = duration_ms - elapsed_ms;
+
+        timeline.value = (elapsed_ms / duration_ms) * 100;
+
+        clearInterval(window.timeline_interval);
+
+        startText.textContent = `${Math.floor(elapsed_ms / 60000)}:${String(Math.floor((elapsed_ms % 60000) / 1000)).padStart(2, '0')}`;
+        endText.textContent = `-${Math.floor(remaining_ms / 60000)}:${String(Math.floor((remaining_ms % 60000) / 1000)).padStart(2, '0')}`;
+    " %>
+
     <meta name="grover-format" content="png">
     <meta name="grover-viewport-width" content=1563>
     <meta name="grover-viewport-height" content=1563>
+    <meta name="grover-execute_script" content="<%= script %>">
 
     <title>Centered Design</title>
     <style>
@@ -158,10 +177,10 @@
         <div class="glowing-text" style="margin-bottom: 50px;">
           <%= artists.join(', ') %>
         </div>
-        <input type="range" class="audio-timeline" min="0" max="100" value="33">
+        <input type="range" class="audio-timeline" id="timeline" min="0" max="<%= duration_ms %>" value="0">
         <div class="audio-timeline__text-block glowing-text">
-          <div class="audio-timeline__text">0:39</div>
-          <div class="audio-timeline__text">-2:40</div>
+          <div class="audio-timeline__text" id="timeline-start">0:00</div>
+          <div class="audio-timeline__text" id="timeline-end">-0:00</div>
         </div>
 
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5" height="100px" color="#E4E2DD">
@@ -173,6 +192,47 @@
       <div class="glowing-text">@mentality_conservation</div>
     </div>
 </div>
+
+<audio autoplay>
+    <source src="<%= preview_url %>" type="audio/mpeg">
+</audio>
+
+<button id="playButton">Play Audio</button>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const timeline = document.getElementById('timeline');
+        const startText = document.getElementById('timeline-start');
+        const endText = document.getElementById('timeline-end');
+
+        const totalDuration = <%= duration_ms %>;
+        const increment = 5;
+
+        const updateTimelineAndText = () => {
+            const currentTime = parseInt(timeline.value);
+            let elapsed = currentTime;
+            let remaining = totalDuration - elapsed;
+
+            startText.textContent = `${Math.floor(elapsed / 60000)}:${String(Math.floor((elapsed % 60000) / 1000)).padStart(2, '0')}`;
+            endText.textContent = `-${Math.floor(remaining / 60000)}:${String(Math.floor((remaining % 60000) / 1000)).padStart(2, '0')}`;
+        };
+
+        timeline.value = (1/3) * totalDuration;
+
+        updateTimelineAndText();
+
+        window.timeline_interval = setInterval(function() {
+            if (parseInt(timeline.value) < totalDuration) {
+                timeline.value = (parseInt(timeline.value) + increment).toString();
+                updateTimelineAndText();
+            } else {
+                clearInterval(window.timeline_interval);
+            }
+        }, increment);
+
+    });
+</script>
+
 
 </body>
 </html>

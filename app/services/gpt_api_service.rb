@@ -1,4 +1,4 @@
-class GptApiService
+class GptApiService < ApplicationService
   attr_reader :config
 
   def initialize(config)
